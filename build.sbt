@@ -12,7 +12,7 @@ lazy val playDir =
 
 lazy val IntegrationTest = config("it") extend Test
 
-lazy val govukFrontendVersion = "3.6.0"
+lazy val govukFrontendVersion = "3.7.0"
 
 lazy val root = Project(libName, file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtTwirl, SbtArtifactory)
