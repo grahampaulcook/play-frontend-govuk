@@ -111,7 +111,7 @@ abstract class TemplateUnitSpec[T: Reads](govukComponentName: String)
     "checkboxes-items-with-attributes",
     "button-input-attributes",
     "button-link-attributes",
-    "button-attributes",
+//    "button-attributes",
     "select-with-falsey-values",
     "tabs-with-falsey-values",
     "summary-list-with-falsey-values",

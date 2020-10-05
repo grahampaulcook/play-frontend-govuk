@@ -56,4 +56,18 @@ object CommonJsonFormats {
     override def writes(o: Option[Html]): JsObject =
       o.map(o => Json.obj("conditional" -> Json.obj("html" -> o.body))).getOrElse(Json.obj())
   }
+
+  val attributesReads: Reads[Map[String, String]] = new Reads[Map[String, String]] {
+    override def reads(json: JsValue): JsResult[Map[String, String]] = {
+      val keyValueTuples = json.as[JsObject].keys.map { key =>
+        val maybeValue: Option[String] = (json \ key).asOpt[String].orElse {
+          (json \ key).asOpt[Int].map(_.toString).orElse {
+            (json \ key).asOpt[Boolean].map(_.toString)
+          }
+        }
+        maybeValue.map(v => (key, v))
+      }
+      JsSuccess(keyValueTuples.flatten.toMap)
+    }
+  }
 }
