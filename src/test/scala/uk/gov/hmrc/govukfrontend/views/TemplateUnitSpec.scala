@@ -37,7 +37,18 @@ abstract class TemplateUnitSpec[T: Reads](govukComponentName: String)
     with Matchers
     with TryValues {
 
-  val skipBecauseTheyCantBeParsed = Seq(
+  val skipBecauseOfJsonValidation = Seq(
+    "date-input-with-values",
+    "table-with-falsey-items",
+    "summary-list-value-with-html",
+  )
+  val skipBecauseOfAttributeOrdering = Seq(
+    "details-attributes",
+    "warning-text-attributes",
+    "breadcrumbs-attributes"
+  )
+  val skipBecauseRequiredItemsSeemToBeMissing = Seq(
+    "select-with-falsey-values",
     "date-input-items-with-classes",
     "date-input-with-id-on-items",
     "date-input-fieldset-html",
@@ -95,35 +106,23 @@ abstract class TemplateUnitSpec[T: Reads](govukComponentName: String)
     "file-upload-with-hint-and-describedBy",
     "button-input-type",
     "button-input-classes",
-    "button-input-attributes",
+    "button-input-attributes"
   )
-  val skipBecauseOfJsonValidation = Seq(
-    "date-input-with-values",
-    "table-with-falsey-items",
-    "select-with-falsey-values",
-    "tabs-with-falsey-values",
-    "summary-list-with-falsey-values",
-    "summary-list-value-with-html",
-    "radios-with-falsey-items",
+  val skipBecauseChangesNeededWithGDS = Seq(
     "checkboxes-with-falsey-values",
-//    "accordion-with-falsey-values",
+    "radios-with-falsey-items",
+    "accordion-with-falsey-values"
   )
-  val skipBecauseOfAttributeOrdering = Seq(
-    "details-attributes",
-    "warning-text-attributes",
-    "breadcrumbs-attributes"
-  )
+  val skip = skipBecauseOfJsonValidation ++
+    skipBecauseOfAttributeOrdering ++ skipBecauseRequiredItemsSeemToBeMissing ++
+    skipBecauseChangesNeededWithGDS
 
   exampleNames(fixturesDirs, govukComponentName)
     .foreach { fixtureDirExampleName =>
       val (fixtureDir, exampleName) = fixtureDirExampleName
 
       s"$exampleName" should {
-        if (!skipBecauseTheyCantBeParsed.contains(exampleName) &&
-          !skipBecauseOfJsonValidation.contains(exampleName) &&
-          !skipBecauseOfAttributeOrdering.contains(exampleName)
-//          && exampleName.eq("accordion-with-falsey-values")
-        ) {
+        if (!skip.contains(exampleName)) {
 
           "render the same html as the nunjucks renderer" in {
             val tryTwirlHtml = renderExample(fixtureDir, exampleName)
@@ -134,12 +133,7 @@ abstract class TemplateUnitSpec[T: Reads](govukComponentName: String)
                 val preProcessedNunjucksHtml = preProcess(nunjucksHtml(fixtureDir, exampleName).success.value)
 
                 preProcessedTwirlHtml shouldBe preProcessedNunjucksHtml
-              case Failure(TemplateValidationException(message)) =>
-                println(s"Failed to validate the parameters for the $govukComponentName template")
-                println(s"Exception: $message")
-                println(s"Skipping test $exampleName")
 
-                fail
             }
           }
         }

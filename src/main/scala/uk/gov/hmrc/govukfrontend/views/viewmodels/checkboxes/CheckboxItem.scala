@@ -69,18 +69,4 @@ object CheckboxItem extends JsonDefaultValueFormatter[CheckboxItem] {
         (__ \ "disabled").write[Boolean] and
         (__ \ "attributes").write[Map[String, String]]
     )(unlift(CheckboxItem.unapply))
-
-//  def checkboxItemSequenceReads: Reads[Seq[CheckboxItem]] = new Reads[Seq[CheckboxItem]] {
-//    override def reads(json: JsValue): JsResult[Seq[CheckboxItem]] = {
-//      json.validate[Seq[JsObject]] match {
-//        case JsSuccess(values, _) =>
-//          val maybeItems = values.map {
-//            _.asOpt[CheckboxItem]
-//          }
-//          JsSuccess(maybeItems.flatten)
-//        case error: JsError => error
-//      }
-//
-//    }
-//  }
 }

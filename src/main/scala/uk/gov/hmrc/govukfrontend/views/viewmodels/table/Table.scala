@@ -18,6 +18,7 @@ package uk.gov.hmrc.govukfrontend.views.viewmodels.table
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
+import uk.gov.hmrc.govukfrontend.views.viewmodels.CommonJsonFormats._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.JsonDefaultValueFormatter
 
 case class Table(
@@ -42,7 +43,7 @@ object Table extends JsonDefaultValueFormatter[Table] {
         (__ \ "captionClasses").read[String] and
         (__ \ "firstCellIsHeader").read[Boolean] and
         (__ \ "classes").read[String] and
-        (__ \ "attributes").read[Map[String, String]]
+        (__ \ "attributes").read[Map[String, String]](attributesReads)
     )(Table.apply _)
 
   override implicit def jsonWrites: OWrites[Table] =
