@@ -95,4 +95,16 @@ object CommonJsonFormats {
       }
     }
   }
+
+  def forgivingSeqReads[T](implicit readsT: Reads[T]): Reads[Seq[T]] = new Reads[Seq[T]] {
+    override def reads(json: JsValue): JsResult[Seq[T]] = {
+      json.validate[Seq[JsValue]].flatMap { jsValues =>
+        val validated = jsValues.flatMap {
+          _.validate[JsObject].flatMap(
+            _.validate[T]).asOpt
+        }
+        JsSuccess(validated)
+      }
+    }
+  }
 }

@@ -38,7 +38,7 @@ object Accordion extends JsonDefaultValueFormatter[Accordion] {
         (__ \ "headingLevel").read[Int] and
         (__ \ "classes").read[String] and
         (__ \ "attributes").read[Map[String, String]](CommonJsonFormats.attributesReads) and
-        (__ \ "items").read[Seq[Section]](Section.sectionSequenceReads)
+        (__ \ "items").read[Seq[Section]](CommonJsonFormats.forgivingSeqReads[Section])
   )(Accordion.apply _)
 
   override implicit def jsonWrites: OWrites[Accordion] = Json.writes[Accordion]

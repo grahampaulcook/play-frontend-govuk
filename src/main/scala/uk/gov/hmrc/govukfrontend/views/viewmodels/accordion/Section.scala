@@ -49,16 +49,4 @@ object Section extends JsonDefaultValueFormatter[Section] {
       "expanded" -> section.expanded
     )
   }
-
-  def sectionSequenceReads: Reads[Seq[Section]] = new Reads[Seq[Section]] {
-    override def reads(json: JsValue): JsResult[Seq[Section]] = {
-      json.validate[Seq[JsValue]].flatMap { jsValues =>
-        val sections = jsValues.flatMap {
-          _.validate[JsObject].flatMap(
-            _.validate[Section]).asOpt
-        }
-        JsSuccess(sections)
-      }
-    }
-  }
 }
