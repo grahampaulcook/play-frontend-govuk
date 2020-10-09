@@ -18,7 +18,7 @@ package uk.gov.hmrc.govukfrontend.views.viewmodels.details
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import uk.gov.hmrc.govukfrontend.views.viewmodels.JsonDefaultValueFormatter
+import uk.gov.hmrc.govukfrontend.views.viewmodels.{CommonJsonFormats, JsonDefaultValueFormatter}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Empty}
 
 case class Details(
@@ -39,7 +39,7 @@ object Details extends JsonDefaultValueFormatter[Details] {
       (__ \ "id").readNullable[String] and
         (__ \ "open").read[Boolean] and
         (__ \ "classes").read[String] and
-        (__ \ "attributes").read[Map[String, String]] and
+        (__ \ "attributes").read[Map[String, String]](CommonJsonFormats.attributesReads) and
         Content.readsHtmlOrText((__ \ "summaryHtml"), (__ \ "summaryText")) and
         Content.reads
     )(Details.apply _)

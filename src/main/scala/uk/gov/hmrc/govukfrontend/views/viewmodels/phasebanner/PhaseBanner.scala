@@ -19,7 +19,7 @@ package uk.gov.hmrc.govukfrontend.views.viewmodels.phasebanner
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import uk.gov.hmrc.govukfrontend.views.html.components._
-import uk.gov.hmrc.govukfrontend.views.viewmodels.JsonDefaultValueFormatter
+import uk.gov.hmrc.govukfrontend.views.viewmodels.{CommonJsonFormats, JsonDefaultValueFormatter}
 
 case class PhaseBanner(
   tag: Option[Tag]                = None,
@@ -35,7 +35,7 @@ object PhaseBanner extends JsonDefaultValueFormatter[PhaseBanner] {
     (
       (__ \ "tag").readNullable[Tag] and
         (__ \ "classes").read[String] and
-        (__ \ "attributes").read[Map[String, String]] and
+        (__ \ "attributes").read[Map[String, String]](CommonJsonFormats.attributesReads) and
         Content.reads
     )(PhaseBanner.apply _)
 

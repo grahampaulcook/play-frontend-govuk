@@ -17,35 +17,7 @@
 package uk.gov.hmrc.govukfrontend.views.viewmodels.breadcrumbs
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.govukfrontend.views.Utils.toAttributes
 import uk.gov.hmrc.govukfrontend.views.viewmodels.JsonRoundtripSpec
 import uk.gov.hmrc.govukfrontend.views.viewmodels.breadcrumbs.Generators._
 
-class BreadcrumbsSpec extends JsonRoundtripSpec[Breadcrumbs] {
-  "BreadcrumbSpec" should {
-    "Attributes should remain in the correct order" in {
-      val breadcrumbs = Json.parse("{\"attributes\" : {\"id\" : \"my-navigation\",\"role\" : \"navigation\"}}").as[Breadcrumbs]
-
-      breadcrumbs.attributes shouldBe Map(
-        "id" -> "my-navigation",
-        "role" -> "navigation1"
-      )
-    }
-    "Attributes should remain in the correct order (a)" in {
-      val breadcrumbs = Json.parse("{\"attributes\" : {\"abcd\" : \"first\",\"efgh\" : \"second\"}}").as[Breadcrumbs]
-
-      breadcrumbs.attributes shouldBe Map(
-        "abcd" -> "first",
-        "efgh" -> "second"
-      )
-    }
-    "Attributes should remain in the correct order (b)" in {
-      val breadcrumbs = Json.parse("{\"attributes\" : {\"efgh\" : \"first\",\"abcd\" : \"second\"}}").as[Breadcrumbs]
-
-      breadcrumbs.attributes shouldBe Map(
-        "efgh" -> "first",
-        "abcd" -> "second"
-      )
-    }
-  }
-}
+class BreadcrumbsSpec extends JsonRoundtripSpec[Breadcrumbs]

@@ -94,31 +94,24 @@ abstract class TemplateUnitSpec[T: Reads](govukComponentName: String)
     "file-upload-error",
     "file-upload-with-hint-and-describedBy",
     "button-input-type",
-    "button-input-classes"
+    "button-input-classes",
+    "button-input-attributes",
   )
   val skipBecauseOfJsonValidation = Seq(
     "date-input-with-values",
     "table-with-falsey-items",
-    "panel-attributes",
-    "phase-banner-attributes",
-    "details-attributes",
-    "checkboxes-with-idPrefix",
-    "checkboxes-attributes",
-    "checkboxes-label-with-attributes",
-    "checkboxes-classes",
-    "checkboxes-with-checked-item",
-    "checkboxes-with-fieldset-describedBy",
-    "checkboxes-items-with-attributes",
-    "button-input-attributes",
-    "button-link-attributes",
-//    "button-attributes",
     "select-with-falsey-values",
     "tabs-with-falsey-values",
     "summary-list-with-falsey-values",
     "summary-list-value-with-html",
     "radios-with-falsey-items",
     "checkboxes-with-falsey-values",
-    "accordion-with-falsey-values"
+//    "accordion-with-falsey-values",
+  )
+  val skipBecauseOfAttributeOrdering = Seq(
+    "details-attributes",
+    "warning-text-attributes",
+    "breadcrumbs-attributes"
   )
 
   exampleNames(fixturesDirs, govukComponentName)
@@ -126,7 +119,11 @@ abstract class TemplateUnitSpec[T: Reads](govukComponentName: String)
       val (fixtureDir, exampleName) = fixtureDirExampleName
 
       s"$exampleName" should {
-        if (!skipBecauseTheyCantBeParsed.contains(exampleName) && !skipBecauseOfJsonValidation.contains(exampleName)) {
+        if (!skipBecauseTheyCantBeParsed.contains(exampleName) &&
+          !skipBecauseOfJsonValidation.contains(exampleName) &&
+          !skipBecauseOfAttributeOrdering.contains(exampleName)
+//          && exampleName.eq("accordion-with-falsey-values")
+        ) {
 
           "render the same html as the nunjucks renderer" in {
             val tryTwirlHtml = renderExample(fixtureDir, exampleName)

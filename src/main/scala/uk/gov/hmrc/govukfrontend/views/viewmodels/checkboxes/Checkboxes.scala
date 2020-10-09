@@ -48,7 +48,7 @@ object Checkboxes extends JsonDefaultValueFormatter[Checkboxes] {
         readsFormGroupClasses and
         (__ \ "idPrefix").readNullable[String] and
         (__ \ "name").read[String] and
-        (__ \ "items").read[Seq[CheckboxItem]] and
+        (__ \ "items").read[Seq[CheckboxItem]] and //(CheckboxItem.checkboxItemSequenceReads) and
         (__ \ "classes").read[String] and
         (__ \ "attributes").read[Map[String, String]]
     )(Checkboxes.apply _)

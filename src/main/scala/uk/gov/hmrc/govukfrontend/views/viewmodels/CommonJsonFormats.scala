@@ -70,4 +70,29 @@ object CommonJsonFormats {
       JsSuccess(keyValueTuples.flatten.toMap)
     }
   }
+
+  val forgivingOptStringReads: Reads[Option[String]] = new Reads[Option[String]] {
+    override def reads(json: JsValue): JsResult[Option[String]] = {
+      val maybeString = json.asOpt[String].orElse {
+        json.asOpt[Int].map(_.toString).orElse {
+          json.asOpt[Boolean].map(_.toString)
+        }
+      }
+      JsSuccess(maybeString)
+    }
+  }
+
+  val forgivingStringReads: Reads[String] = new Reads[String] {
+    override def reads(json: JsValue): JsResult[String] = {
+      val maybeString = json.asOpt[String].orElse {
+        json.asOpt[Int].map(_.toString).orElse {
+          json.asOpt[Boolean].map(_.toString)
+        }
+      }
+      maybeString match {
+        case Some(validString) => JsSuccess(validString)
+        case _ => JsError("error.expected.jsstring")
+      }
+    }
+  }
 }

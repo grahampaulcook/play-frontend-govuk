@@ -20,6 +20,7 @@ package accordion
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Empty}
 
 final case class Section(
@@ -48,5 +49,20 @@ object Section extends JsonDefaultValueFormatter[Section] {
       "content"  -> writesContent().writes(section.content),
       "expanded" -> section.expanded
     )
+  }
+
+  def sectionSequenceReads: Reads[Seq[Section]] = new Reads[Seq[Section]] {
+    override def reads(json: JsValue): JsResult[Seq[Section]] =
+      (json \ "items").validate[Seq[JsObject]] match {
+        case JsSuccess(values, _) =>
+          val maybeItems = values.map {
+            _.asOpt[Section]
+          }
+          JsSuccess(maybeItems.flatten)
+        case error: JsError => {
+          println("ERROR parsing as Seq[JsObject]")
+          error
+        }
+      }
   }
 }

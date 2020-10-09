@@ -19,7 +19,7 @@ package uk.gov.hmrc.govukfrontend.views.viewmodels.panel
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import uk.gov.hmrc.govukfrontend.views.IntString
-import uk.gov.hmrc.govukfrontend.views.viewmodels.JsonDefaultValueFormatter
+import uk.gov.hmrc.govukfrontend.views.viewmodels.{CommonJsonFormats, JsonDefaultValueFormatter}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Empty}
 
 case class Panel(
@@ -37,7 +37,7 @@ object Panel extends JsonDefaultValueFormatter[Panel] {
     (
       (__ \ "headingLevel").read[IntString].int and
         (__ \ "classes").read[String] and
-        (__ \ "attributes").read[Map[String, String]] and
+        (__ \ "attributes").read[Map[String, String]](CommonJsonFormats.attributesReads) and
         Content.readsHtmlOrText((__ \ "titleHtml"), (__ \ "titleText")) and
         Content.reads
     )(Panel.apply _)

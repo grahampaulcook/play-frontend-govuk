@@ -47,13 +47,13 @@ object CheckboxItem extends JsonDefaultValueFormatter[CheckboxItem] {
       Content.reads and
         (__ \ "id").readNullable[String] and
         (__ \ "name").readNullable[String] and
-        (__ \ "value").read[String] and
+        (__ \ "value").read[String](CommonJsonFormats.forgivingStringReads) and
         (__ \ "label").readNullable[Label] and
         (__ \ "hint").readNullable[Hint] and
         (__ \ "checked").read[Boolean] and
         readsConditionalHtml and
         (__ \ "disabled").read[Boolean] and
-        (__ \ "attributes").read[Map[String, String]]
+        (__ \ "attributes").read[Map[String, String]](CommonJsonFormats.attributesReads)
     )(CheckboxItem.apply _)
 
   override implicit def jsonWrites: OWrites[CheckboxItem] =
@@ -70,4 +70,17 @@ object CheckboxItem extends JsonDefaultValueFormatter[CheckboxItem] {
         (__ \ "attributes").write[Map[String, String]]
     )(unlift(CheckboxItem.unapply))
 
+//  def checkboxItemSequenceReads: Reads[Seq[CheckboxItem]] = new Reads[Seq[CheckboxItem]] {
+//    override def reads(json: JsValue): JsResult[Seq[CheckboxItem]] = {
+//      json.validate[Seq[JsObject]] match {
+//        case JsSuccess(values, _) =>
+//          val maybeItems = values.map {
+//            _.asOpt[CheckboxItem]
+//          }
+//          JsSuccess(maybeItems.flatten)
+//        case error: JsError => error
+//      }
+//
+//    }
+//  }
 }
