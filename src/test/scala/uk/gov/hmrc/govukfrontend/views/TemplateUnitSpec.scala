@@ -39,8 +39,7 @@ abstract class TemplateUnitSpec[T: Reads](govukComponentName: String)
 
   val skipBecauseOfJsonValidation = Seq(
     "date-input-with-values",
-    "table-with-falsey-items",
-    "summary-list-value-with-html",
+    "summary-list-value-with-html"
   )
   val skipBecauseOfAttributeOrdering = Seq(
     "details-attributes",

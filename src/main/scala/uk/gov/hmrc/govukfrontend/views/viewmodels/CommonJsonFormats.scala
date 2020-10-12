@@ -20,6 +20,7 @@ import play.api.libs.json._
 import play.twirl.api.Html
 
 import scala.collection.Seq
+import scala.util.Try
 
 object CommonJsonFormats {
   val readsFormGroupClasses: Reads[String] =
@@ -98,13 +99,18 @@ object CommonJsonFormats {
 
   def forgivingSeqReads[T](implicit readsT: Reads[T]): Reads[Seq[T]] = new Reads[Seq[T]] {
     override def reads(json: JsValue): JsResult[Seq[T]] = {
-      json.validate[Seq[JsValue]].flatMap { jsValues =>
-        val validated = jsValues.flatMap {
-          _.validate[JsObject].flatMap(
-            _.validate[T]).asOpt
-        }
-        JsSuccess(validated)
+      json.validate[Seq[JsValue]].map { jsValues =>
+        forgivingSeqValidates(jsValues)(readsT)
       }
+    }
+  }
+
+  private def forgivingSeqValidates[T](jsValues: Seq[JsValue])
+                                      (implicit readsT: Reads[T]): Seq[T] = {
+    jsValues flatMap { jsValue =>
+      val maybeValidated: Option[JsResult[T]] =
+        Try(jsValue.validate[T](readsT)).toOption
+      maybeValidated.flatMap(_.asOpt)
     }
   }
 }
